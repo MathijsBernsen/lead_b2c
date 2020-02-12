@@ -22,15 +22,15 @@
 							<?php
 							echo date_i18n(
 								/* translators: Copyright date format, see https://secure.php.net/date */
-								_x( 'Y', 'copyright date format', 'twentytwenty' )
+								_x( 'Y', 'copyright date format', 'lead-b2c' )
 							);
 							?>
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php bloginfo( 'name' ); ?></a>
 						</p><!-- .footer-copyright -->
 
 						<p class="powered-by-wordpress">
-							<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentytwenty' ) ); ?>">
-								<?php _e( 'Powered by WordPress', 'twentytwenty' ); ?>
+							<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'lead-b2c' ) ); ?>">
+								<?php _e( 'Powered byt Impact Media Concepts', 'lead-b2c' ); ?>
 							</a>
 						</p><!-- .powered-by-wordpress -->
 
