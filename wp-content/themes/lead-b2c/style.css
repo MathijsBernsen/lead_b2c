@@ -1,23 +1,34 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Slab:100,200,300,400,500,600,700,800,900&display=swap');
 
+::selection {
+  background: rgb(91,33,130); /* WebKit/Blink Browsers */
+  color: white;
+}
+
+::-moz-selection {
+  background: rgb(91,33,130); /* Gecko Browsers */
+  color: white;
+}
+
 * {
   font-family: 'Roboto Slab', serif;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 body {
-border: none;
-margin: 0;
-padding: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
+/* navbar start */
 .logo {
   float: left;
 }
-/* ~~ Top Navigation Bar ~~ */
 
 .navigation_bar {
   background-color: white;
-  height: 7em;
+  height: auto;
   width: 100%;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -25,16 +36,22 @@ padding: 0;
 #navigation_container {
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 78%;
   margin: 0 auto;
-  height: 100%;
+  height: 7em;
+}
+
+#menu_navbar {
+  padding-top: 3.5em;
+  padding-bottom: 3.5em;
+  width: 78%;
+  margin: 0 auto;
 }
 
 .logo {
   margin: 1em 0;
   height: 5em;
   width: 20%;
-  border: 1px solid red;
 }
 
 .logo .logo_container {
@@ -46,49 +63,75 @@ padding: 0;
 }
 
 .services_navbar {
-  border: 1px solid red;
   width: 20%;
   margin: 1em 0;
   height: 5em;
 }
 
 .register_navbar {
-  border: 1px solid red;
   width: 47%;
   margin: 1em 0;
   height: 5em;
+  align-items: center;
+  justify-content: space-around;
+  display: flex;
+}
+
+.register_navbar *{
+  align-items: center;
+  font-size: 1.8em;
+}
+
+.register_navbar button{
+  padding: .55em 0;
+  width: 9.5em;
+  font-size: 1.6em;
+  font-weight: bold;
+  background-color: #28A745;
+  color: white;
+  border: 0px solid #28A745;
+  border-radius: 10px;
+}
+
+.dropbtn:focus{
+  border: none;
+  outline: none;
+}
+
+
+.register_navbar span{
+
 }
 
 #menu {
   float: right;
 }
 
-/* Dropdown button */
 .dropbtn {
-  color: black;
-  padding: 16px;
   width: 100%;
   height: 100%;
-  font-size: 16px;
+  font-size: 1.6em;
   border: none;
   background-color: transparent;
+  align-items: center;
 }
 
 .services_navbar {
-  display: inline-block;
+  align-items: center;
+  justify-content: space-around;
+  display: flex;
 }
 
 .dropdown-content {
-  display: none;
-  min-width: 100vw;
+  min-width: 80vw;
   margin-top: 0.9em;
-  box-shadow: 0px 8px 16px -8px rgba(0,0,0,0.2);
   background-color: white;
 }
 
 .dropdown-content a {
-  color: black;
-  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 1.8em;
+  padding: 12px 16px 12px 0px;
   text-decoration: none;
   display: block;
 }

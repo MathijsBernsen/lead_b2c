@@ -1,48 +1,47 @@
 <?php
 function leadB2C_customize_register($wp_customize)
 {
-    //All sections, settings and controls
-    //Create section
-    $wp_customize->add_section('customize_navbar_page', array(
-        'title' => __('Header', 'lead') ,
-        'priority' => 30
-    ));
+	//All sections, settings and controls
+	//Create section
+	$wp_customize->add_section('customize_navbar_page', array(
+			'title' => __('Header', 'lead') ,
+			'priority' => 30
+	));
 
-    //Upload background image
-    $wp_customize->add_setting('logo_upload', array(
-        'default' => '#000000',
-        'transport' => 'refresh'
-    ));
+	//Upload background image
+	$wp_customize->add_setting('logo_upload', array(
+			'default' => '#000000',
+			'transport' => 'refresh'
+	));
 
-    //Media control background
-    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'logo_upload', array(
-        'label' => __('Logo', 'lead-b2c') ,
-        'section' => 'customize_navbar_page',
-        'settings' => 'logo_upload'
-    )));
+	//Media control background
+	$wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'logo_upload', array(
+			'label' => __('Logo', 'lead-b2c') ,
+			'section' => 'customize_navbar_page',
+			'settings' => 'logo_upload'
+	)));
 }
 
 add_action('customize_register', 'leadB2C_customize_register');
 
-function add_viewport_meta_tag()
-{
+function add_viewport_meta_tag() {
     echo '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
 }
 
-add_action('wp_head', 'add_viewport_meta_tag', '1');
+add_action( 'wp_head', 'add_viewport_meta_tag' , '1' );
 
-function register_widget_areas()
-{
 
-    register_sidebar(array(
-        'name' => 'Footer area one',
-        'id' => 'footer_area_one',
-        'description' => 'This widget area discription',
-        'before_widget' => '<section class="footer-area footer-area-one">',
-        'after_widget' => '</section>',
-        'before_title' => '<h4>',
-        'after_title' => '</h4>',
-    ));
+function register_widget_areas() {
+
+  register_sidebar( array(
+    'name'          => 'Footer area one',
+    'id'            => 'footer_area_one',
+    'description'   => 'This widget area discription',
+    'before_widget' => '<section class="footer-area footer-area-one">',
+    'after_widget'  => '</section>',
+    'before_title'  => '<h4>',
+    'after_title'   => '</h4>',
+  ));
 
 }
 
@@ -50,7 +49,7 @@ add_action('widgets_init', 'register_widget_areas');
 
 function leadB2C_customize_css()
 {
-?>
+	?>
 	<style type="text/css">
 
 		.logo_container {
@@ -63,12 +62,21 @@ function leadB2C_customize_css()
 }
 add_action('wp_head', 'leadB2C_customize_css');
 
-function leadB2C_customize_scripts()
-{
-?>
-  <script>alert("asd");</script>
+wp_register_script( 'jQuery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js', null, null, true );
+wp_enqueue_script('jQuery');
+
+function leadB2C_customize_scripts(){
+  ?>
+  <script>
+    console.log( "ready!" );
+		jQuery(document).ready(function($){
+			$(".services_navbar").click(function(){
+					$('#menu_navbar').toggle();
+			});
+		});
+	</script>
   <?php
 }
-add_action('wp_footer', 'leadB2C_customize_scripts');
+add_action( 'wp_footer', 'leadB2C_customize_scripts' );
 
-?>
+ ?>

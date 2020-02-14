@@ -5,14 +5,18 @@
         </div>
         <div class="services_navbar">
               <button class="dropbtn">Andere Diensten</button>
-              <div class="dropdown-content">
-                  <a href="#">Link 1</a>
-                  <a href="#">Link 2</a>
-                  <a href="#">Link 3</a>
-              </div>
         </div>
         <div class="register_navbar">
-
+          <span class="">Ben jij een vakspecialist?</span>
+          <button class="">Meld je aan!</button>
         </div>
+    </div>
+    <div id="menu_navbar">
+      <div class="dropdown-content">
+          <a href="#">Hypotheekadvies-nederland.nl</a>
+          <a href="#">incassoadviesnederland.nl</a>
+          <a href="#">zoekuwnotaris.nl</a>
+          <a href="#">advocatuurnederland.nl</a>
+      </div>
     </div>
 </div>
