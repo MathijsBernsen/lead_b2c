@@ -13,10 +13,27 @@
     </div>
     <div id="menu_navbar">
       <div class="dropdown-content">
-          <a href="#">Hypotheekadvies-nederland.nl</a>
-          <a href="#">incassoadviesnederland.nl</a>
-          <a href="#">zoekuwnotaris.nl</a>
-          <a href="#">advocatuurnederland.nl</a>
+
+      <?php
+      //Set arguments to search by
+      //Category_name isnt a columm name in the database but it works.
+      $args = array(
+        'category_name' => 'pageLink',
+        'posts_per_page' => -1,
+        'order' => 'ASC',
+      );
+
+      $your_query = new WP_Query($args);
+
+      while ($your_query->have_posts()) : $your_query->the_post();
+      ?>
+      <a href="<?php the_permalink() ?>" rel="bookmark"><?php the_title(); ?></a>
+      <?php
+
+      endwhile;
+       ?>
+
+
       </div>
     </div>
 </div>

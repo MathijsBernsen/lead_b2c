@@ -137,5 +137,8 @@ body {
 }
 
 .dropdown-content a:hover {background-color: #ddd;}
+/* Navbar end */
 
-/* Dropdown button */
+.elementor-button-text {
+  color: white;
+}
