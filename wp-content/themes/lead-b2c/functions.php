@@ -3,9 +3,7 @@
 //Including files
 require_once( ABSPATH . 'wp-load.php' );
 require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
-//creating globals
-$GLOBALS['review_edit_id'] = "1";
+$review_edit_id = 1256;
 
 function leadB2C_customize_register($wp_customize)
 {
@@ -190,11 +188,14 @@ function edit_review_callback() {
 
 	//Check if nonce is the same
   check_ajax_referer( 'edit-review-function', 'security' );
-	$test = $_POST['table_id'];
-	$GLOBALS['review_edit_id'] = $test;
-	echo $GLOBALS['review_edit_id'];
-	die();
+
+	global $review_edit_id;
+	$review_edit_id = $_POST['table_id'];
+	echo $review_edit_id;
+	exit();
 }
+
+
 //////////////////////
 //Overview all Reviews
 //////////////////////
@@ -268,7 +269,8 @@ function view_review_render() {
 function edit_review_render() {
 
 	global $wpdb;
-	var_dump($GLOBALS['review_edit_id']);
+	global $review_edit_id;
+	var_dump($review_edit_id);
 	$reviews = $wpdb->get_results( "SELECT * FROM wp_reviews WHERE id='2'");
 
 ?>
