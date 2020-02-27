@@ -290,12 +290,18 @@
   hyphens: manual; }
   .elementor *, .elementor *:before, .elementor *:after {
     box-sizing: border-box; }
+  .elementor a {
+    box-shadow: none;
+    text-decoration: none; }
   .elementor hr {
     margin: 0;
     background-color: transparent; }
   .elementor img {
     height: auto;
-    max-width: 100%; }
+    max-width: 100%;
+    border: none;
+    border-radius: 0;
+    box-shadow: none; }
   .elementor .elementor-widget:not(.elementor-widget-text-editor) figure {
     margin: 0; }
   .elementor embed,
@@ -2173,9 +2179,6 @@ body.elementor-page .elementor-widget-menu-anchor {
   font-size: 50px; }
   .elementor-widget-text-editor .elementor-drop-cap-letter {
     display: inline-block; }
-
-.elementor-widget-toggle .elementor-widget-container {
-  overflow: hidden; }
 
 .elementor-toggle {
   text-align: right; }

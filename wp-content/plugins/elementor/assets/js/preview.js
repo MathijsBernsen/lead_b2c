@@ -82,7 +82,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 611);
+/******/ 	return __webpack_require__(__webpack_require__.s = 614);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1441,13 +1441,21 @@ module.exports = (
 
 /***/ }),
 
-/***/ 611:
+/***/ 614:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _interopRequireDefault = __webpack_require__(0);
+
+var _Object$defineProperty = __webpack_require__(1);
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = void 0;
 
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(2));
 
@@ -1459,258 +1467,82 @@ var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(4));
 
 var _inherits2 = _interopRequireDefault(__webpack_require__(6));
 
-var _layout = _interopRequireDefault(__webpack_require__(612));
-
-var BetaTesterModule =
+var Preview =
 /*#__PURE__*/
 function (_elementorModules$Vie) {
-  (0, _inherits2.default)(BetaTesterModule, _elementorModules$Vie);
+  (0, _inherits2.default)(Preview, _elementorModules$Vie);
 
-  function BetaTesterModule() {
-    (0, _classCallCheck2.default)(this, BetaTesterModule);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(BetaTesterModule).apply(this, arguments));
-  }
-
-  (0, _createClass2.default)(BetaTesterModule, [{
-    key: "onInit",
-    value: function onInit() {
-      elementorModules.ViewModule.prototype.onInit.apply(this, arguments);
-      this.showLayout(false);
-    }
-  }, {
-    key: "showLayout",
-    value: function showLayout() {
-      var always = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-      if (!always && (!elementorAdmin.config.beta_tester.option_enabled || elementorAdmin.config.beta_tester.signup_dismissed || '#tab-fontawesome4_migration' === location.hash)) {
-        return;
-      }
-
-      this.layout = new _layout.default();
-      this.layout.showModal();
-    }
-  }, {
-    key: "getDefaultSettings",
-    value: function getDefaultSettings() {
-      return {
-        selectors: {
-          betaTesterFirstToKnow: '#beta-tester-first-to-know'
-        }
-      };
-    }
-  }, {
-    key: "getDefaultElements",
-    value: function getDefaultElements() {
-      var elements = {};
-      var selectors = this.getSettings('selectors');
-      elements.$betaTesterFirstToKnow = jQuery(selectors.betaTesterFirstToKnow);
-      return elements;
-    }
-  }, {
-    key: "bindEvents",
-    value: function bindEvents() {
-      var elements = this.elements;
-      elements.$betaTesterFirstToKnow.on('click', this.showLayout.bind(this));
-    }
-  }]);
-  return BetaTesterModule;
-}(elementorModules.ViewModule);
-
-jQuery(function () {
-  window.elementorBetaTester = new BetaTesterModule();
-});
-
-/***/ }),
-
-/***/ 612:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(0);
-
-var _Object$defineProperty = __webpack_require__(1);
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(2));
-
-var _createClass2 = _interopRequireDefault(__webpack_require__(3));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(5));
-
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(4));
-
-var _inherits2 = _interopRequireDefault(__webpack_require__(6));
-
-var _view = _interopRequireDefault(__webpack_require__(613));
-
-var BetaTesterLayout =
-/*#__PURE__*/
-function (_elementorModules$com) {
-  (0, _inherits2.default)(BetaTesterLayout, _elementorModules$com);
-
-  function BetaTesterLayout() {
-    (0, _classCallCheck2.default)(this, BetaTesterLayout);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(BetaTesterLayout).apply(this, arguments));
-  }
-
-  (0, _createClass2.default)(BetaTesterLayout, [{
-    key: "ui",
-    value: function ui() {
-      return {
-        closeModal: '.elementor-templates-modal__header__close',
-        dontShowAgain: '.elementor-beta-tester-do-not-show-again'
-      };
-    }
-  }, {
-    key: "events",
-    value: function events() {
-      return {
-        'click @ui.closeModal': this.onCloseModalClick,
-        'click @ui.dontShowAgain': this.onDontShowAgainClick
-      };
-    }
-  }, {
-    key: "getModalOptions",
-    value: function getModalOptions() {
-      return {
-        id: 'elementor-beta-tester-modal',
-        hide: {
-          onBackgroundClick: false
-        }
-      };
-    }
-  }, {
-    key: "getLogoOptions",
-    value: function getLogoOptions() {
-      return {
-        title: elementorAdmin.translate('beta_tester_sign_up')
-      };
-    }
-  }, {
-    key: "initialize",
-    value: function initialize() {
-      elementorModules.common.views.modal.Layout.prototype.initialize.apply(this, arguments);
-      this.showLogo();
-      this.showContentView();
-      var doNotShowAgain = elementorAdmin.translate('do_not_show_again');
-      this.modalHeader.currentView.ui.closeModal.after(jQuery('<div>', {
-        class: 'elementor-beta-tester-do-not-show-again'
-      }).text(doNotShowAgain));
-    }
-  }, {
-    key: "showContentView",
-    value: function showContentView() {
-      this.modalContent.show(new _view.default());
-    }
-  }, {
-    key: "onDontShowAgainClick",
-    value: function onDontShowAgainClick() {
-      this.hideModal();
-      this.onCloseModalClick();
-    }
-  }, {
-    key: "onCloseModalClick",
-    value: function onCloseModalClick() {
-      elementorCommon.ajax.addRequest('introduction_viewed', {
-        data: {
-          introductionKey: elementorAdmin.config.beta_tester.beta_tester_signup
-        }
-      });
-    }
-  }]);
-  return BetaTesterLayout;
-}(elementorModules.common.views.modal.Layout);
-
-exports.default = BetaTesterLayout;
-
-/***/ }),
-
-/***/ 613:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(0);
-
-var _Object$defineProperty = __webpack_require__(1);
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(2));
-
-var _createClass2 = _interopRequireDefault(__webpack_require__(3));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(5));
-
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(4));
-
-var _inherits2 = _interopRequireDefault(__webpack_require__(6));
-
-var BetaTesterView =
-/*#__PURE__*/
-function (_Marionette$ItemView) {
-  (0, _inherits2.default)(BetaTesterView, _Marionette$ItemView);
-
-  function BetaTesterView() {
+  function Preview() {
     var _this;
 
-    (0, _classCallCheck2.default)(this, BetaTesterView);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(BetaTesterView).call(this));
-    _this.id = 'elementor-beta-tester-dialog-content';
-    _this.template = '#tmpl-elementor-beta-tester';
+    (0, _classCallCheck2.default)(this, Preview);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Preview).call(this));
+    elementorFrontend.on('components:init', function () {
+      return _this.onFrontendComponentsInit();
+    });
     return _this;
   }
 
-  (0, _createClass2.default)(BetaTesterView, [{
-    key: "ui",
-    value: function ui() {
-      return {
-        betaForm: '#elementor-beta-tester-form',
-        betaEmail: '#elementor-beta-tester-form__email',
-        betaButton: '#elementor-beta-tester-form__submit'
-      };
-    }
-  }, {
-    key: "events",
-    value: function events() {
-      return {
-        'submit @ui.betaForm': 'onBetaFormSubmit'
-      };
-    }
-  }, {
-    key: "onBetaFormSubmit",
-    value: function onBetaFormSubmit(event) {
-      event.preventDefault();
-      var email = this.ui.betaEmail.val();
-      this.ui.betaButton.addClass('elementor-button-state');
-      elementorCommon.ajax.addRequest('beta_tester_signup', {
-        data: {
-          betaTesterEmail: email
-        } // Do not wait for response.
+  (0, _createClass2.default)(Preview, [{
+    key: "createDocumentsHandles",
+    value: function createDocumentsHandles() {
+      var _this2 = this;
 
+      jQuery.each(elementorFrontend.documentsManager.documents, function (index, document) {
+        var $documentElement = document.$element;
+
+        if ($documentElement.hasClass('elementor-edit-mode')) {
+          return;
+        }
+
+        var $existingHandle = document.$element.children('.elementor-document-handle');
+
+        if ($existingHandle.length) {
+          return;
+        }
+
+        var $handle = jQuery('<div>', {
+          class: 'elementor-document-handle'
+        }),
+            $handleIcon = jQuery('<i>', {
+          class: 'eicon-edit'
+        }),
+            documentTitle = $documentElement.data('elementor-title'),
+            $handleTitle = jQuery('<div>', {
+          class: 'elementor-document-handle__title'
+        }).text(elementor.translate('edit_element', [documentTitle]));
+        $handle.append($handleIcon, $handleTitle);
+        $handle.on('click', function () {
+          return _this2.onDocumentHandleClick(document);
+        });
+        $documentElement.prepend($handle);
       });
-      elementorBetaTester.layout.hideModal();
     }
   }, {
-    key: "onRender",
-    value: function onRender() {}
-  }]);
-  return BetaTesterView;
-}(Marionette.ItemView);
+    key: "onDocumentHandleClick",
+    value: function onDocumentHandleClick(document) {
+      elementorCommon.api.run('editor/documents/switch', {
+        id: document.getSettings('id'),
+        mode: 'autosave'
+      });
+    }
+  }, {
+    key: "onFrontendComponentsInit",
+    value: function onFrontendComponentsInit() {
+      var _this3 = this;
 
-exports.default = BetaTesterView;
+      this.createDocumentsHandles();
+      elementor.on('document:loaded', function () {
+        return _this3.createDocumentsHandles();
+      });
+    }
+  }]);
+  return Preview;
+}(elementorModules.ViewModule); // Temporarily disabled preview app
+// window.elementorPreview = new Preview();
+
+
+exports.default = Preview;
 
 /***/ }),
 
@@ -2104,4 +1936,4 @@ module.exports = __webpack_require__(148);
 /***/ })
 
 /******/ });
-//# sourceMappingURL=beta-tester.js.map
+//# sourceMappingURL=preview.js.map

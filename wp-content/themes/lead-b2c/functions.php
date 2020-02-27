@@ -1,61 +1,72 @@
 <?php
-
 //Including files
-require_once( ABSPATH . 'wp-load.php' );
-require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-$review_edit_id = 1256;
+require_once (ABSPATH . 'wp-load.php');
+require_once (ABSPATH . 'wp-admin/includes/upgrade.php');
+
+add_action('init', 'start_session', 1);
+function start_session(){
+    if(!session_id()) {
+    session_start();
+    }
+}
 
 function leadB2C_customize_register($wp_customize)
 {
-	//All sections, settings and controls
-	//Create section
-	$wp_customize->add_section('customize_navbar_page', array(
-			'title' => __('Header', 'lead') ,
-			'priority' => 30
-	));
+    //All sections, settings and controls
+    //Create section
+    $wp_customize->add_section('customize_navbar_page', array(
+        'title' => __('Header', 'lead') ,
+        'priority' => 30
+    ));
 
-	//Upload background image
-	$wp_customize->add_setting('logo_upload', array(
-			'default' => '#000000',
-			'transport' => 'refresh'
-	));
+    //Upload background image
+    $wp_customize->add_setting('logo_upload', array(
+        'default' => '#000000',
+        'transport' => 'refresh'
+    ));
 
-	//Media control background
-	$wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'logo_upload', array(
-			'label' => __('Logo', 'lead-b2c') ,
-			'section' => 'customize_navbar_page',
-			'settings' => 'logo_upload'
-	)));
+    //Media control background
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'logo_upload', array(
+        'label' => __('Logo', 'lead-b2c') ,
+        'section' => 'customize_navbar_page',
+        'settings' => 'logo_upload'
+    )));
 }
 
 add_action('customize_register', 'leadB2C_customize_register');
 
-function add_viewport_meta_tag() {
+function add_viewport_meta_tag()
+{
     echo '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">';
 }
 
-add_action( 'wp_head', 'add_viewport_meta_tag' , '1' );
+add_action('wp_head', 'add_viewport_meta_tag', '1');
 
+function register_widget_areas()
+{
 
-function register_widget_areas() {
-
-  register_sidebar( array(
-    'name'          => 'Footer area one',
-    'id'            => 'footer_area_one',
-    'description'   => 'This widget area discription',
-    'before_widget' => '<section class="footer-area footer-area-one">',
-    'after_widget'  => '</section>',
-    'before_title'  => '<h4>',
-    'after_title'   => '</h4>',
-  ));
+    register_sidebar(array(
+        'name' => 'Footer area one',
+        'id' => 'footer_area_one',
+        'description' => 'This widget area discription',
+        'before_widget' => '<section class="footer-area footer-area-one">',
+        'after_widget' => '</section>',
+        'before_title' => '<h4>',
+        'after_title' => '</h4>',
+    ));
 
 }
-
 add_action('widgets_init', 'register_widget_areas');
+
+
+add_action( 'admin_enqueue_scripts', 'load_admin_style' );
+function load_admin_style() {
+	wp_enqueue_style( 'admin_css', get_template_directory_uri() . '/admin-style.css', false, '1.0.0' );
+ }
 
 function leadB2C_customize_css()
 {
-	?>
+?>
 	<style type="text/css">
 
 		.logo_container {
@@ -68,56 +79,36 @@ function leadB2C_customize_css()
 }
 add_action('wp_head', 'leadB2C_customize_css');
 
-wp_register_script( 'jQuery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js', null, null, true );
+wp_register_script('jQuery', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js', null, null, true);
 wp_enqueue_script('jQuery');
 
-function leadB2C_customize_scripts(){
-	wp_enqueue_script('main.js', get_bloginfo('template_url').'/assets/js/main.js');
+function leadB2C_customize_scripts()
+{
+    wp_enqueue_script('main.js', get_bloginfo('template_url') . '/assets/js/main.js');
 }
-add_action( 'wp_footer', 'leadB2C_customize_scripts' );
+add_action('wp_footer', 'leadB2C_customize_scripts');
 
 /////////////////////////////////////////////////////////////////////////////////
 //Review Function
 /////////////////////////////////////////////////////////////////////////////////
-
-function review_menu() {
-  add_menu_page(
-      'review_menu_page',
-      'Reviews',
-      'manage_options',
-      'review_page_slug',
-      'view_review_render',
-      'dashicons-star-filled'
-     );
-	add_submenu_page(
-		'review_page_slug',
-		'review_menu_page',
-		'Add review',
-    'manage_options',
-		'sub_menu_item_one_review',
-		'add_review_render'
-	);
-	add_submenu_page(
-		'review_page_slug',
-		'review_menu_page',
-		'Edit review',
-		'manage_options',
-		'sub_menu_item_two_review',
-		'edit_review_render'
-	);
+function review_menu()
+{
+    add_menu_page('review_menu_page', 'Reviews', 'manage_options', 'review_page_slug', 'view_review_render', 'dashicons-star-filled');
+    add_submenu_page('review_page_slug', 'review_menu_page', 'Add review', 'manage_options', 'sub_menu_item_one_review', 'add_review_render');
+    add_submenu_page('review_page_slug', 'review_menu_page', 'Edit review', 'manage_options', 'sub_menu_item_two_review', 'edit_review_render');
 }
 add_action('admin_menu', 'review_menu');
 
 //////////////////////
 //Delete review
 //////////////////////
-
-add_action( 'admin_footer', 'delete_review_javascript' );
-function delete_review_javascript() {
-	//The security nonce
-  $ajax_nonce_delete = wp_create_nonce( "delete-review-function" );
-	$ajax_nonce_edit = wp_create_nonce( "edit-review-function" );
-  ?>
+add_action('admin_footer', 'delete_review_javascript');
+function delete_review_javascript()
+{
+    //The security nonce
+    $ajax_nonce_delete = wp_create_nonce("delete-review-function");
+    $ajax_nonce_edit = wp_create_nonce("edit-review-function");
+?>
 	<script>
 	    jQuery(document).ready(function($) {
 	        $(".delete_review").click(function() {
@@ -154,11 +145,13 @@ function delete_review_javascript() {
 
 							//Send ajax-request
 							$.post(ajaxurl, data, function(response) {
-									alert( 'Response: ' + response );
 							});
 
-							var url = "<?= get_site_url() . '/wp-admin/admin.php?page=sub_menu_item_two_review'?>";
-							$(location).attr('href',url);
+							setTimeout(function() {
+								var url = "<?=get_site_url() . '/wp-admin/admin.php?page=sub_menu_item_two_review' ?>";
+							  $(location).attr('href',url);
+							}, 100);
+
 
 	        });
 	    });
@@ -169,60 +162,43 @@ function delete_review_javascript() {
 //////////////////////
 //Ajax call function
 //////////////////////
+add_action('wp_ajax_delete_review', 'delete_review_callback');
+function delete_review_callback()
+{
 
-add_action( 'wp_ajax_delete_review', 'delete_review_callback' );
-function delete_review_callback() {
+    //Check if nonce is the same
+    check_ajax_referer('delete-review-function', 'security');
 
-	//Check if nonce is the same
-  check_ajax_referer( 'delete-review-function', 'security' );
+    global $wpdb;
+    $delete_review = "DELETE FROM wp_reviews WHERE id='$tableId';";
+    $insert_result = $wpdb->query($delete_review);
 
-	global $wpdb;
-	$delete_review = "DELETE FROM wp_reviews WHERE id='$tableId';";
-	$insert_result = $wpdb->query($delete_review);
-
-  die();
+    die();
 }
 
-add_action( 'wp_ajax_edit_review', 'edit_review_callback' );
-function edit_review_callback() {
+add_action('wp_ajax_edit_review', 'edit_review_callback');
+function edit_review_callback()
+{
 
-	//Check if nonce is the same
-  check_ajax_referer( 'edit-review-function', 'security' );
+    //Check if nonce is the same
+    check_ajax_referer('edit-review-function', 'security');
+		$_SESSION['arrayImg'] = $_POST['table_id'];
+		echo $_SESSION['arrayImg'];
 
-	global $review_edit_id;
-	$review_edit_id = $_POST['table_id'];
-	echo $review_edit_id;
-	exit();
+    wp_die();
 }
-
 
 //////////////////////
 //Overview all Reviews
 //////////////////////
+function view_review_render()
+{
 
-function view_review_render() {
+    global $wpdb;
+    $all_reviews = $wpdb->get_results("SELECT * FROM wp_reviews");
 
-	global $wpdb;
-	$all_reviews = $wpdb->get_results( "SELECT * FROM wp_reviews");
+?>
 
-	?>
-	<style>
-	table {
-	  font-family: arial, sans-serif;
-	  border-collapse: collapse;
-	  max-width: 100%;
-	}
-
-	td, th {
-	  border: 1px solid #dddddd;
-	  text-align: left;
-	  padding: 8px;
-	}
-
-	tr:nth-child(even) {
-	  background-color: #dddddd;
-	}
-</style>
 	<table>
 	  <tr>
 	    <th>ID</th>
@@ -238,24 +214,25 @@ function view_review_render() {
 			<th>Edit</th>
 	  </tr>
 		<?php
-		foreach ( $all_reviews as $review ) {
-			?>
+    foreach ($all_reviews as $review)
+    {
+?>
 			<tr>
-		    <td id="<?= $review->id; ?>"><?= $review->id; ?></td>
-		    <td><?= $review->first_name; ?></td>
-		    <td><?= $review->last_name; ?></td>
-				<td><?= $review->company_name; ?></td>
-				<td><?= $review->kvk_number; ?></td>
-				<td><?= $review->rating; ?></td>
-				<td><?= $review->message; ?></td>
-				<td><?= $review->created; ?></td>
-				<td><?= $review->last_modified; ?></td>
+		    <td id="<?=$review->id; ?>"><?=$review->id; ?></td>
+		    <td><?=$review->first_name; ?></td>
+		    <td><?=$review->last_name; ?></td>
+				<td><?=$review->company_name; ?></td>
+				<td><?=$review->kvk_number; ?></td>
+				<td><?=$review->rating; ?></td>
+				<td><?=$review->message; ?></td>
+				<td><?=$review->created; ?></td>
+				<td><?=$review->last_modified; ?></td>
 				<td><button type="submit" class="delete_review">Delete</button></td>
 				<td><button type="submit" class="edit_review">Edit</button></td>
 		  </tr>
 			<?php
-		}
-		 ?>
+    }
+?>
 
 
 	</table>
@@ -265,37 +242,57 @@ function view_review_render() {
 /////////////
 //Edit Reviews
 /////////////
-
-function edit_review_render() {
-
-	global $wpdb;
-	global $review_edit_id;
-	var_dump($review_edit_id);
-	$reviews = $wpdb->get_results( "SELECT * FROM wp_reviews WHERE id='2'");
+function edit_review_render()
+{
+    global $wpdb;
+		$review_id = $_SESSION['arrayImg'];
+		var_dump(get_template_directory_uri());
+    $reviews = $wpdb->get_results("SELECT * FROM wp_reviews WHERE id='$review_id'");
 
 ?>
+<div class="padding_article">
+<div class="article-content" style="line-height: 1.5em;">
 	<h2>Review aanpassen</h2>
-	<span style="color: #000000;">Hier beneden is het mogelijk om uw review aan te passen.</span>
+	<span style="color: #000000;">Hier beneden is het mogelijk om uw review aan te passen.</span><input  maxlength="150" size="30" value="<?=$reviews[0]->rating; ?>" id="review_rating" name="review_rating" type="text" />
 	 <form name="edit_review_form" id="edit_review_form" method="post" action="" >
 	 <h3 class="cf_text">De gegevens</h3>
 		<table name="form_table_edit_review" >
 			<tr>
-				<td>Voornaam*</td><td> <input  maxlength="150" size="30" value="<?= $reviews[0]->first_name; ?>" id="review_first_name" name="review_first_name" type="text" required /></td>
+				<td>Voornaam*</td><td> <input  maxlength="150" size="30" value="<?=$reviews[0]->first_name; ?>" id="review_first_name" name="review_first_name" type="text" required /></td>
 			</tr>
 			<tr>
-				<td>Achternaam</td><td> <input  maxlength="150" size="30" value="<?= $reviews[0]->last_name; ?>" id="review_last_name" name="review_last_name" type="text" /></td>
+				<td>Achternaam</td><td> <input  maxlength="150" size="30" value="<?=$reviews[0]->last_name; ?>" id="review_last_name" name="review_last_name" type="text" /></td>
 			</tr>
 			<tr>
-				<td>Bedrijfsnaam</td><td> <input  maxlength="150" size="30" value="<?= $reviews[0]->company_name; ?>" id="review_company_name" name="review_company_name" type="text" /></td>
+				<td>Bedrijfsnaam</td><td> <input  maxlength="150" size="30" value="<?=$reviews[0]->company_name; ?>" id="review_company_name" name="review_company_name" type="text" /></td>
 			</tr>
 			<tr>
-				<td>kvk-nummer</td><td> <input  maxlength="150" size="30" value="<?= $reviews[0]->kvk_number; ?>" id="review_kvk_number" name="review_kvk_number" type="text" /></td>
+				<td>kvk-nummer</td><td> <input  maxlength="150" size="30" value="<?=$reviews[0]->kvk_number; ?>" id="review_kvk_number" name="review_kvk_number" type="text" /></td>
 			</tr>
 			<tr>
-				<td>Beoordeling</td><td> <input  maxlength="150" size="30" value="<?= $reviews[0]->rating; ?>" id="review_rating" name="review_rating" type="text" /></td>
+				<td>Beoordeling</td><td>
+					<fieldset class="rate">
+					    <input type="radio" id="rating10" name="rating" value="10" /><label for="rating10" title="5 stars"></label>
+					    <input type="radio" id="rating9" name="rating" value="9" /><label class="half" for="rating9" title="4 1/2 stars"></label>
+					    <input type="radio" id="rating8" name="rating" value="8" /><label for="rating8" title="4 stars"></label>
+					    <input type="radio" id="rating7" name="rating" value="7" /><label class="half" for="rating7" title="3 1/2 stars"></label>
+					    <input type="radio" id="rating6" name="rating" value="6" /><label for="rating6" title="3 stars"></label>
+					    <input type="radio" id="rating5" name="rating" value="5" /><label class="half" for="rating5" title="2 1/2 stars"></label>
+					    <input type="radio" id="rating4" name="rating" value="4" /><label for="rating4" title="2 stars"></label>
+					    <input type="radio" id="rating3" name="rating" value="3" /><label class="half" for="rating3" title="1 1/2 stars"></label>
+					    <input type="radio" id="rating2" name="rating" value="2" /><label for="rating2" title="1 star"></label>
+					    <input type="radio" id="rating1" name="rating" value="1" /><label class="half" for="rating1" title="1/2 star"></label>
+					    <input type="radio" id="rating0" name="rating" value="0" /><label for="rating0" title="No star"></label>
+					</fieldset>
+				</td>
 			</tr>
 			<tr>
-				<td>Bericht</td><td><?php $kv_editor_args =  array('media_buttons' => false , 'teeny' => true , 'default_value' => 'asdasdasd'); wp_editor( $reviews[0]->message , 'review_message',  $kv_editor_args ); ?></td>
+				<td>Bericht</td><td><?php $kv_editor_args = array(
+        'media_buttons' => false,
+        'teeny' => true,
+        'default_value' => 'asdasdasd'
+    );
+    wp_editor($reviews[0]->message, 'review_message', $kv_editor_args); ?></td>
 			</tr>
 			<tr colspan="2" style="text-align: center;">
 					<td>
@@ -307,16 +304,19 @@ function edit_review_render() {
 			</tr>
 		</table>
 	</form>
-<?php }
+</div>
+</div>
+<?php
+}
 
 /////////////
 //Add Reviews
 /////////////
-
-function add_review_render() {
-	global $wpdb;
-	$reviews_table_name = $wpdb->prefix . 'reviews';
-	$sql = "CREATE TABLE {$reviews_table_name} (
+function add_review_render()
+{
+    global $wpdb;
+    $reviews_table_name = $wpdb->prefix . 'reviews';
+    $sql = "CREATE TABLE {$reviews_table_name} (
 				id INT NOT NULL auto_increment,
 				first_name varchar(25) NULL,
 				last_name varchar(25) NULL,
@@ -328,63 +328,67 @@ function add_review_render() {
 				last_modified datetime DEFAULT CURRENT_TIMESTAMP,
 				PRIMARY KEY  (id))";
 
-	dbDelta($sql);
+    dbDelta($sql);
 
-	if( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) &&  $_POST['action'] == "submit_review") {
-		$fields = array(
-					'review_first_name',
-					'review_last_name',
-					'review_company_name',
-					'review_kvk_number',
-					'review_rating',
-					'review_message'
-				);
+    if ('POST' == $_SERVER['REQUEST_METHOD'] && !empty($_POST['action']) && $_POST['action'] == "submit_review")
+    {
+        $fields = array(
+            'review_first_name',
+            'review_last_name',
+            'review_company_name',
+            'review_kvk_number',
+            'review_rating',
+            'review_message'
+        );
 
-				foreach ($fields as $field) {
-					if (isset($_POST[$field])) {
-						$_POST[$field] = stripslashes(trim($_POST[$field]));
-					}
-				}
+        foreach ($fields as $field)
+        {
+            if (isset($_POST[$field]))
+            {
+                $_POST[$field] = stripslashes(trim($_POST[$field]));
+            }
+        }
 
-		$review_first_name = $_POST['review_first_name'];
-		$review_last_name = $_POST['review_last_name'];
-		$review_company_name = $_POST['review_company_name'];
-		$review_kvk_number = $_POST['review_kvk_number'];
-		$review_rating = $_POST['review_rating'];
-		$review_message = $_POST['review_message'];
+        $review_first_name = $_POST['review_first_name'];
+        $review_last_name = $_POST['review_last_name'];
+        $review_company_name = $_POST['review_company_name'];
+        $review_kvk_number = $_POST['review_kvk_number'];
+        $review_rating = $_POST['review_rating'];
+        $review_message = $_POST['review_message'];
 
-		$insert_review = "INSERT INTO $reviews_table_name
-		(id, first_name, last_name, company_name, kvk_number, rating, message, created, last_modified)
-		VALUES
-		(NULL, '$review_first_name', '$review_last_name', '$review_company_name', '$review_kvk_number', '$review_rating', '$review_message', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
-		$insert_result = $wpdb->query($insert_review);
-	}
-	?>
+    //     $insert_review = "INSERT INTO $reviews_table_name
+		// (id, first_name, last_name, company_name, kvk_number, rating, message, created, last_modified)
+		// VALUES
+		// (NULL, '$review_first_name', '$review_last_name', '$review_company_name', '$review_kvk_number', '$review_rating', '$review_message', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+    //     $insert_result = $wpdb->query($insert_review);
+     }
+?>
 
 
 	<div class="padding_article">
 
-	<div class="article-content" style="line-height: 3em;">
+	<div class="article-content" style="line-height: 1em;">
 	<?php
-		if($sub_success == 'Success') {
-			echo '<div class="success">' . __( 'Thank you we will get back you soon.', 'post_new' ) . '</div>';
-			$sub_success = null;
-		}
-		$errors = [];
-		if (isset($errors) && sizeof($errors)>0 && $errors->get_error_code()) :
-			echo '<ul class="errors">';
-			foreach ($errors->errors as $error) {
-				echo '<li>'.$error[0].'</li>';
-			}
-			echo '</ul>';
-		endif;
-	?>
-
+    if ($sub_success == 'Success')
+    {
+        echo '<div class="success">' . __('Thank you we will get back you soon.', 'post_new') . '</div>';
+        $sub_success = null;
+    }
+    $errors = [];
+    if (isset($errors) && sizeof($errors) > 0 && $errors->get_error_code()):
+        echo '<ul class="errors">';
+        foreach ($errors->errors as $error)
+        {
+            echo '<li>' . $error[0] . '</li>';
+        }
+        echo '</ul>';
+    endif;
+?>
 	<h2>Recensie toevoegen.</h2>
 	<span style="color: #000000;">Hier beneden is het mogelijk om uw review achter te laten.</span>
 	 <form name="add_review_form" id="add_review_form" method="post" action="" >
 	 <h3 class="cf_text">De gegevens</h3>
-		<table name="form_table_add_review" >
+		<table name="form_table_add_review">
 			<tr>
 				<td>Voornaam*</td><td> <input  maxlength="150" size="30" title="" id="review_first_name" name="review_first_name" type="text" required /></td>
 			</tr>
@@ -398,10 +402,29 @@ function add_review_render() {
 				<td>kvk-nummer</td><td> <input  maxlength="150" size="30" title="" id="review_kvk_number" name="review_kvk_number" type="text" /></td>
 			</tr>
 			<tr>
-				<td>Beoordeling</td><td> <input  maxlength="150" size="30" title="" id="review_rating" name="review_rating" type="text" /></td>
+				<td>Beoordeling</td>
+					<td>
+						<fieldset class="rate">
+					    <input type="radio" id="rating10" name="rating" value="10" /><label for="rating10" title="5 stars"></label>
+					    <input type="radio" id="rating9" name="rating" value="9" /><label class="half" for="rating9" title="4 1/2 stars"></label>
+					    <input type="radio" id="rating8" name="rating" value="8" /><label for="rating8" title="4 stars"></label>
+					    <input type="radio" id="rating7" name="rating" value="7" /><label class="half" for="rating7" title="3 1/2 stars"></label>
+					    <input type="radio" id="rating6" name="rating" value="6" /><label for="rating6" title="3 stars"></label>
+					    <input type="radio" id="rating5" name="rating" value="5" /><label class="half" for="rating5" title="2 1/2 stars"></label>
+					    <input type="radio" id="rating4" name="rating" value="4" /><label for="rating4" title="2 stars"></label>
+					    <input type="radio" id="rating3" name="rating" value="3" /><label class="half" for="rating3" title="1 1/2 stars"></label>
+					    <input type="radio" id="rating2" name="rating" value="2" /><label for="rating2" title="1 star"></label>
+					    <input type="radio" id="rating1" name="rating" value="1" /><label class="half" for="rating1" title="1/2 star"></label>
+					    <input type="radio" id="rating0" name="rating" value="0" /><label for="rating0" title="No star"></label>
+					</fieldset>
+				</td>
 			</tr>
 			<tr>
-				<td>Bericht</td><td><?php $kv_editor_args =  array('media_buttons' => false , 'teeny' => true ); wp_editor( '', 'review_message',  $kv_editor_args ); ?></td>
+				<td>Bericht</td><td><?php $kv_editor_args = array(
+        'media_buttons' => false,
+        'teeny' => true
+    );
+    wp_editor('', 'review_message', $kv_editor_args); ?></td>
 			</tr>
 			<tr colspan="2" style="text-align: center;">
 					<td>
@@ -413,4 +436,7 @@ function add_review_render() {
 			</tr>
 		</table>
 	</form>
-<?php } ?>
+</div>
+</div>
+<?php
+} ?>
