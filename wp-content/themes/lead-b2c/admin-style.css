@@ -1,4 +1,8 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+#wpcontent {
+  padding: .5em !important;
+
+}
 
 /* Ratings widget */
 .rate {
@@ -44,6 +48,7 @@
 
 /* Click + hover color */
 input:checked~label,
+
 /* color current and previous stars on checked */
 label:hover,
 label:hover~label {
@@ -51,20 +56,54 @@ label:hover~label {
 }
 
 /* color previous stars on hover */
-
 table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    max-width: 100%;
+  width: 100%;
 }
 
-td,
-th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+#all_reviews button {
+color: #494949;
+text-transform: uppercase;
+text-decoration: none;
+background: #ffffff;
+padding: 5px 10px;;
+border: 1px solid #494949;
+display: inline-block;
+transition: all 0.4s ease 0s;
+border-radius: 4px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.delete_review:hover {
+color: #ffffff !important;
+background: rgb(214,78,7) !important;
+border-color: rgb(214,78,7) !important;
+transition: all 0.4s ease 0s !important;
+}
+
+.edit_review:hover {
+color: #ffffff !important;
+background: #0073AA !important;
+border-color: #0073AA !important;
+transition: all 0.4s ease 0s !important;
+}
+
+#all_reviews {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#all_reviews td, #all_reviews th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#all_reviews tr:nth-child(even){background-color: #F6F6F6;}
+
+#all_reviews tr:hover {background-color: #ddd;}
+
+#all_reviews th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #32373C;
+  color: white;
 }
